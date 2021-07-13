@@ -30,11 +30,12 @@ const GlobalStyle = createGlobalStyle`
 
 const theme = {
   colors: {
-    primary: '#0070f3',
-  },
+    primary: '#0070f3'
+  }
 }
 
-export default function App({ Component, pageProps }) {
+// eslint-disable-next-line react/prop-types
+export default function App ({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />

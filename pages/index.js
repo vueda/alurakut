@@ -1,78 +1,43 @@
-import MainGrid from '../src/components/MainGrid'
-import Box from '../src/components/Box'
-import { AlurakutMenu, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons'
-import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations'
+import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { AlurakutLayout } from '../src/components/layout/AlurakutLayout'
+import { ProfileBox } from '../src/components/ProfileBox'
+import { WelcomeBox } from '../src/components/WelcomeBox'
+import { CommunityForm } from '../src/components/CommunityForm'
+import { RelationsBox } from '../src/components/RelationsBox'
 
-export async function getServerSideProps() {
+export async function getServerSideProps () {
   const githubUser = 'vueda'
   const res = await fetch(`https://api.github.com/users/${githubUser}/followers`)
   const followers = await res.json()
   return {
     props: {
       githubUser,
-      followers,
-      stats: { 'confiavel': 3, 'legal': 2, 'sexy': 1 }
+      followers: followers.map(f => ({ id: f.login, image: `https://github.com/${f.login}.png` })),
+      stats: { confiavel: 3, legal: 2, sexy: 1 }
     }
   }
 }
 
-function ProfileSidebar({ githubUser }) {
+export default function Home ({ githubUser, stats, followers }) {
+  const [communities, setCommunities] = useState([{ id: 'Eu odeio acordar cedo', image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg' }])
   return (
-    <Box>
-      <img src={`https://github.com/${githubUser}.png`} style={{ borderRadius: '8px' }} />
-    </Box>
+    <AlurakutLayout
+      user={githubUser}
+      left={<ProfileBox user={githubUser} />}
+      center={<>
+        <WelcomeBox stats={stats} />
+        <CommunityForm communities={communities} setCommunities={setCommunities} />
+      </>}
+      right={<>
+        <RelationsBox title="Seguidores" relations={followers} />
+        <RelationsBox title="Comunidades" relations={communities} />
+      </>}
+    />
   )
 }
-
-function WelcomeBox({ stats }) {
-  return (
-    <Box>
-      <h1 className="title">
-        Bem vindo(a)
-      </h1>
-      <OrkutNostalgicIconSet {...stats} />
-    </Box>
-  );
-}
-
-function RelationsSidebar({ followers }) {
-  return (
-    <ProfileRelationsBoxWrapper>
-      <h2 className="smallTitle">
-        Pessoas da comunidade ({followers.length})
-      </h2>
-
-      <ul>
-        {followers.map(person => {
-          return (
-            <li key={person.login}>
-              <a href={`/users/${person.login}`}>
-                <img src={`https://github.com/${person.login}.png`} />
-                <span>{person.login}</span>
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-    </ProfileRelationsBoxWrapper>
-  )
-}
-
-export default function Home({ githubUser, stats, followers }) {
-  return (
-    <>
-      <AlurakutMenu githubUser={githubUser} />
-      <MainGrid>
-        <div className="profileArea" style={{ gridArea: 'profileArea' }}>
-          <ProfileSidebar githubUser={githubUser} />
-        </div>
-        <div className="welcomeArea" style={{ gridArea: 'welcomeArea' }}>
-          <WelcomeBox stats={stats} />
-        </div>
-        <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
-          <RelationsSidebar followers={followers} />
-        </div>
-      </MainGrid>
-    </>
-  )
+Home.propTypes = {
+  githubUser: PropTypes.string,
+  stats: PropTypes.object,
+  followers: PropTypes.array
 }

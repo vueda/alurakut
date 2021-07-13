@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Box from '../Box'
+import { Box } from './layout/Box'
 
-export const ProfileRelationsBoxWrapper = styled(Box)`
+const RelationsBoxWrapper = styled(Box)`
   ul {
     display: grid;
     grid-gap: 8px;
@@ -51,3 +52,28 @@ export const ProfileRelationsBoxWrapper = styled(Box)`
     }
   }
 `
+
+export function RelationsBox ({ title, relations }) {
+  return (<RelationsBoxWrapper>
+         <h2 className="smallTitle">
+        {title} ({relations.length})
+      </h2>
+
+      <ul>
+        {relations.map((rel) => {
+          return (
+            <li key={rel.id}>
+              <a href={`/users/${rel.id}`}>
+                <img src={rel.image} />
+                <span>{rel.id}</span>
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+  </RelationsBoxWrapper>)
+}
+RelationsBox.propTypes = {
+  title: PropTypes.string,
+  relations: PropTypes.array
+}
