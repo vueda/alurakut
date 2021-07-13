@@ -1,12 +1,12 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import NextLink from 'next/link';
+/* eslint-disable react/prop-types */
+import React from 'react'
+import styled, { css } from 'styled-components'
+import NextLink from 'next/link'
 
-const BASE_URL = 'http://alurakut.vercel.app/';
-const v = '1';
+const BASE_URL = 'http://alurakut.vercel.app/'
+const v = '1'
 
-
-function Link({ href, children, ...props }) {
+function Link ({ href, children, ...props }) {
   return (
     <NextLink href={href} passHref>
       <a {...props}>
@@ -19,15 +19,15 @@ function Link({ href, children, ...props }) {
 // ================================================================================================================
 // Menu
 // ================================================================================================================
-export function AlurakutMenu({ githubUser }) {
-  const [isMenuOpen, setMenuState] = React.useState(false);
+export function AlurakutMenu ({ githubUser }) {
+  const [isMenuOpen, setMenuState] = React.useState(false)
   return (
     <AlurakutMenu.Wrapper isMenuOpen={isMenuOpen}>
       <div className="container">
         <AlurakutMenu.Logo src={`${BASE_URL}/logo.svg`} />
 
         <nav style={{ flex: 1 }}>
-          {[{ name: 'Inicio', slug: '/'}, {name: 'Amigos', slug: '/amigos'}, {name: 'Comunidades', slug: '/comunidades'}].map((menuItem) => (
+          {[{ name: 'Inicio', slug: '/' }, { name: 'Amigos', slug: '/amigos' }, { name: 'Comunidades', slug: '/comunidades' }].map((menuItem) => (
             <Link key={`key__${menuItem.name.toLocaleLowerCase()}`} href={`${menuItem.slug.toLocaleLowerCase()}`}>
               {menuItem.name}
             </Link>
@@ -35,7 +35,7 @@ export function AlurakutMenu({ githubUser }) {
         </nav>
 
         <nav>
-          <a href={`/logout`}>
+          <a href={'/logout'}>
             Sair
           </a>
           <div>
@@ -159,15 +159,15 @@ AlurakutMenu.Wrapper = styled.header`
       }
     } 
   }
-`;
+`
 AlurakutMenu.Logo = styled.img`
   background-color: #ffffff;
   padding: 9px 14px;
   border-radius: 1000px;
   height: 34px;
-`;
+`
 
-function AlurakutMenuProfileSidebar({ githubUser }) {
+function AlurakutMenuProfileSidebar ({ githubUser }) {
   return (
     <div className="alurakutMenuProfileSidebar">
       <div>
@@ -189,7 +189,7 @@ function AlurakutMenuProfileSidebar({ githubUser }) {
 // ================================================================================================================
 // AlurakutProfileSidebarMenuDefault
 // ================================================================================================================
-export function AlurakutProfileSidebarMenuDefault() {
+export function AlurakutProfileSidebarMenuDefault () {
   return (
     <AlurakutProfileSidebarMenuDefault.Wrapper>
       <nav>
@@ -239,12 +239,12 @@ AlurakutProfileSidebarMenuDefault.Wrapper = styled.div`
       margin-right: 5px; 
     }
   }
-`;
+`
 
 // ================================================================================================================
 // OrkutNostalgicIconSet
 // ================================================================================================================
-export function OrkutNostalgicIconSet(props) {
+export function OrkutNostalgicIconSet (props) {
   return (
     <OrkutNostalgicIconSet.List>
       {[
@@ -252,7 +252,7 @@ export function OrkutNostalgicIconSet(props) {
         { name: 'Fotos', slug: 'fotos', icon: 'camera' },
         { name: 'Videos', slug: 'videos', icon: 'video-camera' },
         { name: 'Fãs', slug: 'fas', icon: 'star' },
-        { name: 'Mensagens', slug: 'mensagens', icon: 'email' },
+        { name: 'Mensagens', slug: 'mensagens', icon: 'email' }
       ].map(({ name, slug, icon }) => (
         <li key={`orkut__icon_set__${slug}`}>
           <span style={{ gridArea: 'title' }} className="OrkutNostalgicIconSet__title">
@@ -267,22 +267,22 @@ export function OrkutNostalgicIconSet(props) {
       {[
         { name: 'Confiável', slug: 'confiavel', icon: 'smile' },
         { name: 'Legal', slug: 'legal', icon: 'cool' },
-        { name: 'Sexy', slug: 'sexy', icon: 'heart' },
+        { name: 'Sexy', slug: 'sexy', icon: 'heart' }
       ].map(({ name, slug, icon }) => {
-        const total = props[slug] ? props[slug] : 2;
+        const total = props[slug] ? props[slug] : 2
         return (
           <li key={`orkut__icon_set__${slug}`}>
             <span className="OrkutNostalgicIconSet__title">
               {name}
             </span>
-            <span className="OrkutNostalgicIconSet__iconComplex" className="OrkutNostalgicIconSet__number" style={{ gridArea: 'number' }}>
+            <span className="OrkutNostalgicIconSet__iconComplex OrkutNostalgicIconSet__number" style={{ gridArea: 'number' }}>
               {[0, 1, 2].map((_, index) => {
-                const isHeartActive = index <= (total - 1);
+                const isHeartActive = index <= (total - 1)
                 return <img key={`orkut__icon_set__${slug}_img_${index}`} src={`https://alurakut.vercel.app/icons/${icon}.svg`} style={{ marginRight: '2px', opacity: isHeartActive ? 1 : '0.5' }} />
               })}
             </span>
           </li>
-        );
+        )
       })}
     </OrkutNostalgicIconSet.List>
   )
@@ -318,7 +318,7 @@ OrkutNostalgicIconSet.List = styled.ul`
       }
     }
   }
-`;
+`
 
 // ================================================================================================================
 // Login Page
@@ -458,7 +458,7 @@ const AlurakutLoginScreen = css`
       }
     }
   }
-`;
+`
 
 // ================================================================================================================
 // Reset Styles
@@ -505,4 +505,4 @@ export const AlurakutStyles = css`
   }
 
   ${AlurakutLoginScreen}
-`;
+`
