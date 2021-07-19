@@ -5,34 +5,29 @@ import { ProfileBox } from '../src/components/ProfileBox'
 import { WelcomeBox } from '../src/components/WelcomeBox'
 import { CommunityForm } from '../src/components/CommunityForm'
 import { RelationsBox } from '../src/components/RelationsBox'
+import { getAuthenticatedUser } from '../src/services/LoginService'
+import { getUserData } from '../src/services/UserService'
 
-export async function getServerSideProps () {
-  const githubUser = 'vueda'
-  const res = await fetch(`https://api.github.com/users/${githubUser}/followers`)
-  const followers = await res.json()
+export async function getServerSideProps (context) {
+  const { githubUser, isAuthenticated, exists, limit } = await getAuthenticatedUser(context)
+  if (!isAuthenticated || !exists || limit) {
+    return {
+      redirect: {
+        destination: `/login?exists=${exists}&limit=${limit}`,
+        permanent: false
+      }
+    }
+  }
 
-  const resDato = await fetch('https://graphql.datocms.com/', {
-    method: 'POST',
-    headers: {
-      Authorization: process.env.DATOCMS_TOKEN,
-      'Content-Type': 'application/json',
-      Accept: 'application/json'
-    },
-    body: JSON.stringify({ query: 'query { allCommunities { id title imageUrl creatorSlug} }' })
-  })
-  const { data: { allCommunities } } = await resDato.json()
-
+  const data = await getUserData(githubUser)
   return {
     props: {
-      githubUser,
-      followers: followers.map(f => ({ id: f.login, image: `https://github.com/${f.login}.png` })),
-      communities: allCommunities.map(f => ({ id: f.title, image: f.imageUrl, creatorSlug: f.creatorSlug })),
-      stats: { confiavel: 3, legal: 2, sexy: 1 }
+      ...data
     }
   }
 }
 
-export default function Home ({ githubUser, stats, followers, communities }) {
+export default function HomePage ({ githubUser, stats, followers, communities }) {
   const [comm, setCommunities] = useState(communities)
   return (
     <AlurakutLayout
@@ -49,7 +44,7 @@ export default function Home ({ githubUser, stats, followers, communities }) {
     />
   )
 }
-Home.propTypes = {
+HomePage.propTypes = {
   githubUser: PropTypes.string,
   stats: PropTypes.object,
   followers: PropTypes.array,
