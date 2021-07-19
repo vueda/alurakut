@@ -7,7 +7,6 @@ export default function LoginPage () {
   const [user, setUser] = useState('')
   const [erro, setErro] = useState('')
   useEffect(() => {
-    console.log(router.query)
     if (router.query.limit === 'true') {
       setErro('Limite de requisições excedido. Aguarde para tentar novamente.')
     } else if (router.query.exists === 'false') {
